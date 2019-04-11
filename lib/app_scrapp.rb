@@ -43,7 +43,7 @@ def scrap_value_usd
 	return $array_value_usd
 end
 
-def hashtest
+def perform
 
   results = Hash.new
 
@@ -63,4 +63,4 @@ end
 connexion_page_html
 scrap_id
 scrap_value_usd
-hashtest
+perform

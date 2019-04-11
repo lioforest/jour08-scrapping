@@ -17,13 +17,8 @@ def connexion_page_html (cible = "http://www.annuaire-des-mairies.com/val-d-oise
 end
 
 
-def get_townhall_email(townhall_url)
-
-	email_mairie = $page.xpath("/html/body/div/main/section[2]/div/table/tbody/tr[4]/td[2]")
-	puts email_mairie.text
-end
-
 def get_townhall_urls
+
 
 	#On récupère le nom des mairies
 	array_mairieS =[]
@@ -32,25 +27,50 @@ def get_townhall_urls
 		array_mairieS << mairie.text.downcase
 	end
 
-
 	#En fonction de leur nom, on récupère leur URL
-	array_mairieS_url=[]
+	$array_mairieS_url=[]
 	
 	array_mairieS.each do |mairie_url|
-		mairie_url = mairie_url.gsub!(/\s/,'-')
-        array_mairieS_url << "http://annuaire-des-mairies.com/95/#{mairie_url}.html"
+		mairie_url = mairie_url.gsub(/[' ']/, '-')
+        $array_mairieS_url << "http://annuaire-des-mairies.com/95/#{mairie_url}.html"
 	end
-
-    #On crée un array rempli avec des hashs (composés de nos deux array)
-    array_finale = []
-
-    array_mairieS.count.times do |index|
-        array_finale << {array_mairieS[index] => array_mairieS_url[index]}
-    end
-    puts array_finale.inspect
 
 end
 
+	
 
+def get_townhall_email(array_mairieS_url)
+
+	
+ 	ville = []
+  	email = []
+  	ensemble = []
+  
+  	$array_mairieS_url.each do |townhall_url|
+
+    	doc = Nokogiri::HTML(open(townhall_url))
+    	doc.xpath('//html/body/div/main/section[2]/div/table/tbody/tr[4]/td[2]').each do |node|
+    		email << node.text
+ 	   	end
+
+    	doc.xpath('//strong/a[@class = "lientxt4"]').each do |node|
+    		ville << node.text.capitalize
+    	end
+  	end
+
+  ville.size.times do |i|
+    ensemble << { ville[i] => email[i] }
+  end
+  puts ensemble
+ensemble
+
+end
+
+def perform
 connexion_page_html
-get_townhall_urls
+get_townhall_email(get_townhall_urls)
+end
+
+
+perform
+

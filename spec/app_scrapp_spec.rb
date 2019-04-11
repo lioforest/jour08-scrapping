@@ -1,22 +1,16 @@
- # ligne très importante qui appelle la gem.
 
 require_relative '../lib/app_scrapp'
 
-describe "scrap_id method" do
 
- it "should return , and client is not nil" do
-    expect(scrap_id).not_to be_nil
-   end
-
-end
+describe "the perform method" do
 
 
-require_relative '../lib/app_scrapp'
+	it "should return an array" do
+		expect(perform).is_a?(Array)
+	end
 
-describe "scrap_id method" do
 
- it "should return , and client is not nil" do
-    expect(scrap_id).not_to be_nil
-   end
+
 
 end
+
